@@ -1,0 +1,44 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  background-color: rgb(202, 201, 201);
+}
+.table {
+  max-width: 700px;
+  margin-top: 20px;
+}
+.checkbox {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  height: 15px;
+  width: 15px;
+}
+.taskbox {
+  position: relative;
+  width: 400px;
+}
+.count {
+  align-content: center;
+}
+.task {
+  color: rgb(59, 122, 59);
+  position: relative;
+  top: 8px;
+}
+
+.addbtn {
+  max-width: 100px;
+}
+thead {
+  text-align: center;
+}
+.tdb {
+  position: relative;
+  left: 20px;
+}
+.mb-3 {
+  max-width: 700px;
+  margin-top: 30px;
+}
