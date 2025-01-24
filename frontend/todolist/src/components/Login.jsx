@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -11,6 +12,16 @@ function Login() {
   let handleSubmit = (e) => {
     e.preventDefault();
     console.log(name + password);
+  };
+  let register = async () => {
+    let data = await axios.post("http://localhost:2222/register", {
+      name: name,
+      password: password,
+    });
+    console.log(data.data.token);
+
+    sessionStorage.setItem("token", data.data.token);
+    nav("/Home");
   };
 
   let goHome = () => {
@@ -43,13 +54,7 @@ function Login() {
           {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group> */}
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={() => {
-              goHome();
-            }}
-          >
+          <Button variant="primary" type="submit" onClick={register}>
             Submit
           </Button>
           <p style={{ marginTop: "20px" }}>

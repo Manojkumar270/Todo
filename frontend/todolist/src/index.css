@@ -8,10 +8,17 @@ body {
   max-width: 700px;
   margin-top: 20px;
 }
+.trow {
+  vertical-align: middle;
+  text-align: center;
+}
+.taskbox {
+  text-align: left;
+}
 .checkbox {
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 16px;
   height: 15px;
   width: 15px;
 }
@@ -36,9 +43,19 @@ thead {
 }
 .tdb {
   position: relative;
-  left: 20px;
 }
 .mb-3 {
   max-width: 700px;
   margin-top: 30px;
+}
+.updateinput {
+  max-width: 240px;
+}
+
+.okbtn {
+  border: 1px solid green;
+  max-height: 30px;
+  text-align: center;
+  border-radius: 5px;
+  margin-left: 20px;
 }

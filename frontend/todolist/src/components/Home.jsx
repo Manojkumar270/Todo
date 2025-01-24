@@ -5,37 +5,67 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [data, setData] = useState([]);
   const [task, setTask] = useState("");
+  const [update, setUpdate] = useState("");
+  const nav = useNavigate();
   let count = 0;
 
-  let getDtata = async () => {
+  let getData = async () => {
     let data = await axios.get("http://localhost:2222/get");
     console.log(data.data.task);
     setData(data.data.task);
   };
 
-  useEffect(() => {
-    getDtata();
-  }, []);
-
   let postData = async () => {
     await axios.post("http://localhost:2222/post", { task: task });
     console.log(task);
-    getDtata();
+    getData();
   };
 
   let deleteData = async (id) => {
     await axios.delete("http://localhost:2222/delete/" + id);
-    getDtata();
+    getData();
   };
 
   let toggleCompletion = async (id) => {
     await axios.put("http://localhost:2222/complete/" + id);
-    getDtata();
+    getData();
   };
+  let updateData = async (id) => {
+    await axios.put("http://localhost:2222/update/" + id);
+    console.log(data);
+
+    getData();
+  };
+
+  let change = async (id) => {
+    try {
+      await axios.put("http://localhost:2222/change/" + id, { task: update });
+      getData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  let auth = async () => {
+    let data = await axios.get("http://localhost:2222/auth", {
+      headers: { token: sessionStorage.getItem("token") },
+    });
+    if (data.data.status == 200) {
+      alert(data.data.message);
+      getData();
+    } else {
+      alert("you don't have access");
+      nav("/");
+    }
+  };
+  useEffect(() => {
+    auth();
+  }, []);
 
   return (
     <>
@@ -80,18 +110,47 @@ function Home() {
                   <tr className="trow">
                     <td className="count">{(count = count + 1)}</td>
                     <td className="taskbox">
-                      <p
-                        className="task"
-                        style={{
-                          textDecoration: item.completed
-                            ? "line-through"
-                            : "none",
-                          color: item.completed ? "black" : "green",
-                        }}
-                      >
-                        {" "}
-                        {item.task}
-                      </p>{" "}
+                      {item.update ? (
+                        <></>
+                      ) : (
+                        <p
+                          className="task"
+                          style={{
+                            textDecoration: item.completed
+                              ? "line-through"
+                              : "none",
+                            color: item.completed ? "black" : "green",
+                          }}
+                        >
+                          {" "}
+                          {item.task}
+                        </p>
+                      )}
+
+                      {item.update ? (
+                        <input
+                          required
+                          className="updateinput"
+                          type="text"
+                          onChange={(e) => {
+                            setUpdate(e.target.value);
+                          }}
+                        />
+                      ) : (
+                        <></>
+                      )}
+                      {item.update ? (
+                        <>
+                          <button
+                            className="okbtn"
+                            onClick={() => change(item._id)}
+                          >
+                            Ok
+                          </button>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                       <input
                         className="checkbox"
                         type="checkbox"
@@ -105,14 +164,16 @@ function Home() {
                     <td>
                       <Button
                         className="tdb"
-                        variant="outline-primary"
+                        variant="primary"
                         id="button-addon2"
+                        onClick={() => updateData(item._id)}
                       >
                         Update
                       </Button>
                     </td>
                     <td>
                       <Button
+                        className="tdb"
                         variant="outline-danger"
                         id="button-addon2"
                         onClick={() => deleteData(item._id)}
@@ -126,6 +187,16 @@ function Home() {
             })}
           </tbody>
         </Table>
+        <Button
+          variant="outline-danger"
+          id="button-addon2"
+          onClick={() => {
+            sessionStorage.clear();
+            nav("/");
+          }}
+        >
+          LogOut
+        </Button>
       </center>
     </>
   );
