@@ -37,6 +37,7 @@ function Login() {
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>UserName</Form.Label>
             <Form.Control
+              required
               type="name"
               placeholder="Enter userName"
               onChange={(e) => setName(e.target.value)}
@@ -46,6 +47,7 @@ function Login() {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
+              required
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -54,7 +56,15 @@ function Login() {
           {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group> */}
-          <Button variant="primary" type="submit" onClick={register}>
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={() => {
+              if (name != "" && password != "") {
+                register();
+              }
+            }}
+          >
             Submit
           </Button>
           <p style={{ marginTop: "20px" }}>

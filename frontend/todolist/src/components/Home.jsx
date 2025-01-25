@@ -23,6 +23,7 @@ function Home() {
   let postData = async () => {
     await axios.post("http://localhost:2222/post", { task: task });
     console.log(task);
+    setTask("");
     getData();
   };
 
@@ -75,6 +76,7 @@ function Home() {
         <InputGroup className="mb-3">
           <Form.Control
             placeholder="Add Task"
+            value={task}
             onChange={(e) => setTask(e.target.value)}
           />
           <Button
