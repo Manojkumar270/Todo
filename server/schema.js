@@ -7,12 +7,29 @@ const taskSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
-    default: false, // Default value
+    default: false,
   },
   update: {
     type: Boolean,
-    default: false, // Default value
+    default: false,
   },
 });
-const tasks = mongoose.model("taskData", taskSchema);
-module.exports = tasks;
+
+const registerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+const taskData = mongoose.model("taskData", taskSchema);
+const regData = mongoose.model("regData", registerSchema);
+module.exports = { taskData, regData };

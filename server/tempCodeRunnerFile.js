@@ -1,1 +1,1 @@
-app.use(auth);
+await taskData.updateMany({}, { update: false });

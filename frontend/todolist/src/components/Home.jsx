@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
+import { Card } from "react-bootstrap";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -56,64 +57,119 @@ function Home() {
     let data = await axios.get("http://localhost:2222/auth", {
       headers: { token: sessionStorage.getItem("token") },
     });
-    if (data.data.status == 200) {
-      alert(data.data.message);
-      getData();
-    } else {
+    if (data.data.status != 200) {
       alert("you don't have access");
       nav("/");
     }
   };
   useEffect(() => {
     auth();
+    getData();
   }, []);
 
   return (
-    <>
-      <center style={{ marginTop: "100px" }}>
-        <h1>ToDo List</h1>
-
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder="Add Task"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
-          <Button
-            className="addbtn"
-            type="button"
-            variant="success"
-            onClick={() => postData()}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        padding: "20px",
+      }}
+    >
+      <Card
+        style={{
+          width: "700px",
+          padding: "20px",
+          borderRadius: "10px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          backgroundColor: "transparent",
+        }}
+      >
+        <Card.Body>
+          <h1
+            className="text-center"
+            style={{ color: "#333", marginBottom: "20px" }}
           >
-            Add
-          </Button>
-        </InputGroup>
+            ToDo List
+          </h1>
 
-        <Table
-          responsive
-          bordered
-          hover
-          variant="light"
-          className="table"
-          size="sm"
-        >
-          <thead className="thead">
-            <tr>
-              <th>No</th>
-              <th style={{ width: "400px" }}>Tasks</th>
-              <th>Update</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, id) => {
-              return (
-                <>
-                  <tr className="trow">
-                    <td className="count">{(count = count + 1)}</td>
-                    <td className="taskbox">
+          <InputGroup className="mb-3">
+            <Form.Control
+              style={{ backgroundColor: "transparent" }}
+              placeholder="Add Task"
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+            />
+            <Button
+              className="addbtn"
+              type="button"
+              variant="success"
+              onClick={() => postData()}
+            >
+              Add
+            </Button>
+          </InputGroup>
+
+          <Table
+            responsive
+            bordered
+            // hover
+            variant="light"
+            className="table"
+            size="sm"
+            style={{ backgroundColor: "transparent" }}
+          >
+            <thead
+              style={{ backgroundColor: "transparent" }}
+              // className="thead bg-primary text-white"
+            >
+              <tr>
+                <th style={{ backgroundColor: "transparent" }}>No</th>
+                <th style={{ width: "300px", backgroundColor: "transparent" }}>
+                  Tasks
+                </th>
+                <th style={{ backgroundColor: "transparent" }}>Update</th>
+                <th style={{ backgroundColor: "transparent" }}>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, id) => {
+                count += 1;
+                return (
+                  <tr className="trow" key={item._id}>
+                    <td
+                      style={{ backgroundColor: "transparent" }}
+                      className="count"
+                    >
+                      {count}
+                    </td>
+                    <td
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "black",
+                        display: "flex",
+                      }}
+                      className="taskbox"
+                    >
                       {item.update ? (
-                        <></>
+                        <>
+                          <input
+                            placeholder="task"
+                            required
+                            className="updateinput form-control"
+                            type="text"
+                            onChange={(e) => setUpdate(e.target.value)}
+                          />
+                          <button
+                            className="btn btn-success btn-sm mt-1"
+                            style={{ marginLeft: "10px" }}
+                            onClick={() => change(item._id)}
+                          >
+                            Ok
+                          </button>
+                        </>
                       ) : (
                         <p
                           className="task"
@@ -121,86 +177,64 @@ function Home() {
                             textDecoration: item.completed
                               ? "line-through"
                               : "none",
-                            color: item.completed ? "black" : "green",
+                            color: item.completed ? "black" : "white",
+                            fontSize: "16px",
                           }}
                         >
-                          {" "}
                           {item.task}
                         </p>
                       )}
 
-                      {item.update ? (
-                        <input
-                          required
-                          className="updateinput"
-                          type="text"
-                          onChange={(e) => {
-                            setUpdate(e.target.value);
-                          }}
-                        />
-                      ) : (
-                        <></>
-                      )}
-                      {item.update ? (
-                        <>
-                          <button
-                            className="okbtn"
-                            onClick={() => change(item._id)}
-                          >
-                            Ok
-                          </button>
-                        </>
-                      ) : (
-                        <></>
-                      )}
                       <input
+                        onChange={() => toggleCompletion(item._id)}
                         className="checkbox"
                         type="checkbox"
-                        onChange={() => {
-                          console.log(item.task);
-                          toggleCompletion(item._id);
-                        }}
+                        checked={item.completed}
+                        style={{ marginLeft: "10px" }}
                       />
                     </td>
 
-                    <td>
+                    <td style={{ backgroundColor: "transparent" }}>
                       <Button
                         className="tdb"
                         variant="primary"
-                        id="button-addon2"
+                        size="sm"
                         onClick={() => updateData(item._id)}
                       >
                         Update
                       </Button>
                     </td>
-                    <td>
+                    <td style={{ backgroundColor: "transparent" }}>
                       <Button
                         className="tdb"
-                        variant="outline-danger"
-                        id="button-addon2"
+                        variant="danger"
+                        size="sm"
                         onClick={() => deleteData(item._id)}
                       >
                         Delete
                       </Button>
                     </td>
                   </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </Table>
-        <Button
-          variant="outline-danger"
-          id="button-addon2"
-          onClick={() => {
-            sessionStorage.clear();
-            nav("/");
-          }}
-        >
-          LogOut
-        </Button>
-      </center>
-    </>
+                );
+              })}
+            </tbody>
+          </Table>
+          <div className="text-center">
+            <Button
+              variant="danger"
+              id="button-addon2"
+              onClick={() => {
+                sessionStorage.clear();
+                nav("/");
+              }}
+              className="mt-3"
+            >
+              Log Out
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 
